@@ -1,0 +1,390 @@
+/*/
+File: description.ext
+Author:
+	
+	Quiksilver
+
+Last modified:
+
+	10/03/2024 A3 2.18 by Quiksilver
+	
+Description:
+
+	https://community.bistudio.com/wiki/Description.ext
+____________________________________________/*/
+
+missionProductVersion = "1.5.7";
+missionProductStatus = "Dev";											// "Stable" // "Beta" // "Dev"
+missionProductDate = "10.03.2024";
+author = "Quiksilver";																															/*/ Visible when loading mission/*/
+onLoadName = __EVAL(format ["%1 %2 %3",localize "STR_QS_Utility_011","&",localize "STR_QS_Utility_012"]);			// Invade & Annex			/*/ Visible when loading mission/*/
+onLoadMission = "";
+loadScreen = __EVAL(selectRandom ["media\images\loadScreens\loading_0.jpg","media\images\loadScreens\loading_1.paa","media\images\loadScreens\loading_2.paa","media\images\loadScreens\loading_3.paa","media\images\loadScreens\loading_4.paa","media\images\loadScreens\loading_5.paa","media\images\loadScreens\loading_6.paa","media\images\loadScreens\loading_7.paa","media\images\loadScreens\loading_8.paa","media\images\loadScreens\loading_9.paa"]);
+overviewPicture = __EVAL(selectRandom ["media\images\loadScreens\loading_0.jpg","media\images\loadScreens\loading_1.paa","media\images\loadScreens\loading_2.paa","media\images\loadScreens\loading_3.paa","media\images\loadScreens\loading_4.paa","media\images\loadScreens\loading_5.paa","media\images\loadScreens\loading_6.paa","media\images\loadScreens\loading_7.paa","media\images\loadScreens\loading_8.paa","media\images\loadScreens\loading_9.paa"]);
+overviewText = "";
+overviewTextLocked = "";
+onLoadIntro = "";													/*/ Displays a message while the intro is loading./*/
+onLoadIntroTime = 0;												/*/ Time and date displayed while the intro loads. 1 visible, 0 hidden./*/
+onLoadMissionTime = 0;												/*/ Time and date displayed while the mission loads. 1 visible, 0 hidden./*/
+missionGroup = "ApexFramework";										/*/ Required for missionProfileNamespace compatibility between updates./*/
+class Header {
+	gameType = COOP;												/*/ Unknown, COOP, DM, TDM, CTF, SC, CTI, RPG, Sandbox, Seize, Defend./*/
+	minPlayers = 1;													/*/ Min # of players the MISSION supports/*/
+	maxPlayers = 84;												/*/ Max # of players the MISSION supports, not server slots. Make sure # is greater than server slots./*/
+};
+skipLobby = 0;											// Player skips lobby on join. An attractive idea, however many players report "Stuck on receieving data" when this is enabled due to bugged lobby slots. So we leave this off for stability.
+disabledAI = 1;											/*/ No AI in playable units/*/
+aiKills = 0; 											/*/ disable scorelist for AI players/*/
+enableItemsDropping = 0; 								/*/ disabled with 0/*/
+joinUnassigned = 0;										/*/ 0 = players forced into role on join/*/
+showUAVFeed = 1;										/*/ Enables/Disables the UAV Feed./*/
+showGroupIndicator = 0;
+showSquadRadar = 0;
+forceRotorLibSimulation = 0;							/*/ Advanced Flight Model /*/
+scriptedPlayer = 1;
+
+disableRandomization[] = {};
+disableGateRandomization = 1;
+arsenalRestrictedItems[] = {};							// Used to blacklist undesired Arsenal equipment, which prevents user saved loadout from being loaded if it contains restricted items. // More restrictions in "code\functions\fn_clientArsenal.sqf"
+allowProfileGlasses = 0;								// When set to 0 will stop glasses set in player profile from being added to player's gear.
+overrideFeedback = 1; 									// 0: force default handling, 1+: allow custom handling.
+overrideHazeQuality = -1; 								// 0/1/2 - VeryLow/Low/Standard
+unsafeCVL=1;											// Setting to 0 will disable nighttime AO illumination (ambient fire).  https://community.bistudio.com/wiki/createVehicleLocal
+debriefing = 1;
+windyCoef = 0.60;										// How strong is wind sound at altitude. https://community.bistudio.com/wiki/enableEnvironment
+
+// Revive
+
+ReviveMode = 0;											// Apex Framework Notes: Keep this as 0.																	//0: disabled, 1: enabled, 2: controlled by player attributes
+ReviveUnconsciousStateMode = 0;							// Apex Framework Notes: Not used																			//0: basic, 1: advanced, 2: realistic
+ReviveRequiredTrait = 1;								// Apex Framework Notes: If set as 0, any role can revive													//0: none, 1: medic trait is required
+ReviveRequiredItems = 2;								// Apex Framework Notes: If set as 0, no items required. If 1, medikit. If 2, medikit + first aid kit.	 	//0: none, 1: medkit, 2: medkit or first aid kit
+ReviveRequiredItemsFakConsumed = 1;						// Apex Framework Notes: If set as 0, First Aid Kit not used on revive. If 1, First Aid Kit consumed.		//0: first aid kit is not consumed upon revive, 1: first aid kit is consumed
+ReviveDelay = 6;										// Apex Framework Notes: Not used (we link to animation speed instead)										//time needed to revive someone (in secs)
+ReviveMedicSpeedMultiplier = 2;							// Apex Framework Notes: Not used																			//speed multiplier for revive performed by medic
+ReviveForceRespawnDelay = 3;							// Apex Framework Notes: Not used																			//time needed to perform force respawn (in secs)
+ReviveBleedOutDelay = 600;								// Apex Framework Notes: General bleedout time. default: 600 seconds (10 minutes)							//unconscious state duration (in secs)
+
+// Vanilla Garbage Collector - https://community.bistudio.com/wiki/Description.ext#Corpse_&_Wreck_Management
+
+corpseManagerMode = 1;					// 0 - Disabled (add manually in script). 1 - Enabled (All corpses).
+corpseLimit = 30;
+corpseRemovalMinTime = 30;
+corpseRemovalMaxTime = 600;
+
+wreckManagerMode = 3;					// 0 - None automatically (add manually in script). 1 - All. 2 - Only vanilla respawning. 3 - All except vanilla respawning.
+wreckLimit = 10;
+wreckRemovalMinTime = 60;
+wreckRemovalMaxTime = 1200;
+
+weaponholderManagerMode = 1;
+weaponholderLimit = 30;
+weaponholderRemovalMinTime = 60;
+weaponholderRemovalMaxTime = 1200;
+
+//minPlayerDistance = 50;
+minPlayerDistance[] = {25, 50, 25};		//  {corpses, wrecks, weaponholders}
+disposalCheckPeriod = 10;				// How often the remains collector checks monitored remains for removal. The value can be between 1 and 60.
+
+// Respawn
+
+respawn = 3;											/*/ 0 = none. 1 = bird. 2 = instant where died. 3 = base or respawn_west marker. 4 = respawn with team, or bird. 5 = into AI or bird./*/
+respawnDelay = 5;										/*/ Delay prior to respawn/*/
+respawnDialog = 0;										/*/ default = 1. show respawn timer and scoreboard when killed./*/
+respawnOnStart = 0;
+
+respawnVehicle = 3;		    // number version - 2 = Instant, 3 = Base
+respawnVehicleDelay = 12;
+
+class CfgUnitTemplates {};
+class CfgVehicleTemplates {};
+class DifficultyOverride {
+	tacticalPing = 2; // disables tactical ping in this mission, even if selected difficulty preset has it enabled
+};
+
+// Security - CfgRemoteExec + CfgDisabledCommands
+#include "code\config\security.hpp"						// Delete this line if you are having issues with Mod/DLC compatibility. This file contains CfgRemoteExec + CfgDisabledCommands
+
+// CfgFunctions
+#include "code\config\functions.hpp"
+
+class CfgDebriefing {
+	class QS_RD_end_2 {
+		title = "$STR_QS_Dialogs_001";
+		description = "$STR_QS_Dialogs_002";
+		picture = "media\images\insignia\comm_patch.paa";
+	};
+	class QS_RD_end_3 {
+		title = "$STR_QS_Dialogs_003";
+		description = "$STR_QS_Dialogs_004";
+		picture = "media\images\insignia\comm_patch.paa";
+	};
+	class QS_RD_end_4 {
+		title = "$STR_QS_Dialogs_005";
+		description = "$STR_QS_Dialogs_006";
+		picture = "media\images\insignia\comm_patch.paa";
+	};
+	class QS_RD_end_5 {
+		title = "$STR_QS_Dialogs_007";
+		description = "$STR_QS_Dialogs_008";
+		picture = "media\images\insignia\comm_patch.paa";
+	};
+	class QS_RD_end_6 {
+		title = "$STR_QS_Dialogs_009";
+		description = "$STR_QS_Dialogs_010";
+		picture = "\a3\UI_F_Jets\Data\CfgUnitInsignia\jets_patch_01.paa";
+	};
+	class QS_RD_end_7 {
+		title = "$STR_QS_Dialogs_011";
+		description = "$STR_QS_Dialogs_012";
+		picture = "\a3\UI_F_Jets\Data\CfgUnitInsignia\jets_patch_01.paa";	
+	};
+	class QS_RD_end_8 {
+		title = "$STR_QS_Dialogs_013";
+		description = "$STR_QS_Dialogs_014";
+		picture = "media\images\insignia\comm_patch.paa";
+	};
+	class QS_RD_end_9 {
+		title = "$STR_QS_Dialogs_015";
+		description = "$STR_QS_Dialogs_016";
+		picture = "\a3\UI_F_Jets\Data\CfgUnitInsignia\jets_patch_01.paa";
+	};
+	class QS_RD_end_10 {
+		title = "$STR_QS_Dialogs_017";
+		description = "$STR_QS_Dialogs_018";
+		picture = "\a3\UI_F_Jets\Data\CfgUnitInsignia\jets_patch_01.paa";	
+	};
+};
+class CfgLeaflets {
+	class East {
+		text = "Text of the leaflet"; 										// Text shown when previewing the leaflet full-screen. Ideally should be localized, so even player who cannot read the image can get the information
+		texture = "media\images\insignia\comm_patch.paa"; 					// Leaflet texture shown when previewing the leaflet full-screen
+		model = "myLeaflet.p3d"; 											// In-flight model. Optional; When undefined, generic white leaflet is used
+	};
+	class West {
+		text = "Text of the leaflet"; 										// Text shown when previewing the leaflet full-screen. Ideally should be localized, so even player who cannot read the image can get the information
+		texture = "media\images\insignia\comm_patch.paa"; 					// Leaflet texture shown when previewing the leaflet full-screen
+		model = "myLeaflet.p3d"; 											// In-flight model. Optional; When undefined, generic white leaflet is used
+	};
+	class Guer {
+		text = "Text of the leaflet"; 										// Text shown when previewing the leaflet full-screen. Ideally should be localized, so even player who cannot read the image can get the information
+		texture = "media\images\insignia\comm_patch.paa"; 					// Leaflet texture shown when previewing the leaflet full-screen
+		model = "myLeaflet.p3d"; 											// In-flight model. Optional; When undefined, generic white leaflet is used
+	};
+	class Civ {
+		text = "Text of the leaflet"; 										// Text shown when previewing the leaflet full-screen. Ideally should be localized, so even player who cannot read the image can get the information
+		texture = "media\images\insignia\comm_patch.paa"; 					// Leaflet texture shown when previewing the leaflet full-screen
+		model = "myLeaflet.p3d"; 											// In-flight model. Optional; When undefined, generic white leaflet is used
+	};
+};
+class CfgSounds {
+	class QS_audio_notification {
+        name="Notification Apex";
+        sound[]={"media\audio\QS_notification.ogg",1,1};
+        titles[] = {};	
+	};
+	class QS_audio_notificationClose {
+        name="Notification Apex";
+        sound[]={"media\audio\QS_notificationClose.ogg",1,1};
+        titles[] = {};	
+	};
+	class QS_audio_notification_2 {
+        name="Notification Apex 2";
+        sound[]={"media\audio\QS_notification2.ogg",1,1};
+        titles[] = {};	
+	};
+	class QS_audio_notification_2Close {
+        name="Notification Apex 2";
+        sound[]={"media\audio\QS_notificationClose2.ogg",1,1};
+        titles[] = {};	
+	};
+	class Intro {
+        name="Intro";
+        sound[]={"\media\audio\intro.ogg",0.9,1};
+        titles[] = {};
+    };
+	class Intro2 {
+        name="Intro2";
+        sound[]={"\media\audio\intro2.ogg",0.9,1};
+        titles[] = {};
+    };
+	class Intro3 {
+        name="Intro3";
+        sound[]={"\media\audio\intro3.ogg",0.9,1};
+        titles[] = {};
+    };
+	class Intro4 {
+        name="Intro4";
+        sound[]={"\media\audio\intro4.ogg",0.9,1};
+        titles[] = {};
+    };
+	class Intro5 {
+        name="Intro5";
+        sound[]={"\media\audio\intro5.ogg",0.9,1};
+        titles[] = {};
+    };
+	class Intro6 {
+        name="Intro6";
+        sound[]={"\media\audio\intro6.ogg",0.9,1};
+        titles[] = {};
+    };
+	class QS_SC_outro_win {
+		name="QS_SC_outro_win";
+		sound[]={"media\audio\QS_sc_outro_usa.ogg",0.9,1};
+		titles[] = {};
+	};
+	class QS_SC_outro_lose {
+		name="QS_SC_outro_lose";
+		sound[]={"media\audio\QS_sc_outro_china.ogg",0.9,1};
+		titles[] = {};
+	};
+	class TheEnd {
+		name="TheEnd";
+		sound[] = {"media\audio\end.ogg",0.9,1};
+		titles[] = {};
+	};
+	class Bells {
+		name="Bells";
+		sound[] = {"media\audio\bells.ogg",0.9,1};
+		titles[] = {};
+	};
+    class missile_warning_1 {
+        name = "Missile Warning";
+		sound[] = {"media\audio\locking_2.wss",0.9,1};
+        titles[] = {};
+    };
+    class activate_mine_1 {
+        name = "Activate Mine";
+		sound[] = {"media\audio\activate_mine.wss",0.9,1};
+        titles[] = {};
+    };
+	class hit_marker_2 {
+		name = "Hit Marker 1";
+		sound[] = {"media\audio\hitmarker_2.wss",0.9,1};
+		titles[] = {};
+	};
+	class QS_Siren_L {
+		name = "Siren_Long";
+		sound[] = {"media\audio\Siren_Long.ogg",1.0,1};
+		titles[] = {};
+	};
+	class QS_radio_in_0 {
+		name = "Radio_In_1";
+		sound[] = {"media\audio\in2a.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_radio_in_1 {
+		name = "Radio_In_2";
+		sound[] = {"media\audio\in2b.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_radio_in_2 {
+		name = "Radio_In_3";
+		sound[] = {"media\audio\in2c.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_radio_out_0 {
+		name = "Radio_Out_1";
+		sound[] = {"media\audio\out2a.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_radio_out_1 {
+		name = "Radio_Out_2";
+		sound[] = {"media\audio\out2b.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_radio_out_2 {
+		name = "Radio_Out_3";
+		sound[] = {"media\audio\out2b.ogg",1.0,1};
+		titles[] = {};	
+	};
+	class QS_restart {
+		name = "Restart_Indicator";
+		sound[] = {"media\audio\mockingjay.ogg",1.0,1};
+		titles[] = {};
+	};
+	class QS_cbrn_1 {
+		name = "CBRN_1";
+		sound[] = {"media\audio\cbrn.ogg",1.0,1};
+		titles[] = {};		
+	};
+	class QS_cbrn_2 {
+		name = "CBRN_2";
+		sound[] = {"media\audio\cbrn2.wss",1.0,1};
+		titles[] = {};		
+	};
+};
+class CfgSFX
+{
+	class PlowDown
+	{
+		sound0[] = {"@A3\Sounds_F\vehicles\armor\bobcat\bobcat_plow_down_01",10,1,75,1,15,20,25};
+		sounds[] = {sound0};
+		empty[] = {"", 0, 0, 0, 0, 0, 0, 0};
+	};
+	class PlowUp
+	{
+		sound0[] = {"@A3\Sounds_F\vehicles\armor\bobcat\bobcat_plow_up_01",10,1,75,1,15,20,25};
+		sounds[] = {sound0};
+		empty[] = {"", 0, 0, 0, 0, 0, 0, 0};
+	};
+	/*/
+	class QS_DeviceAssembled_SFX
+	{
+		sound0[] = {"@A3\Sounds_F_EPC\Device\device_assembled_loop",10,1,75,0,26,26,26};
+		sounds[] = {sound0};
+		empty[] = {"", 0, 0, 0, 0, 0, 0, 0};
+	};
+	class QS_DeviceDisassembled_SFX
+	{
+		sound0[] = {"@A3\Sounds_F_EPC\Device\device_disassembled_loop",10,1,75,0,26,26,26};
+		sounds[] = {sound0};
+		empty[] = {"", 0, 0, 0, 0, 0, 0, 0};
+	};
+	/*/
+};
+class CfgVehicles
+{
+	class SoundPlowDown
+	{
+		sound = "PlowDown";
+	};
+	class SoundPlowUp
+	{
+		sound = "PlowUp";
+	};
+};
+class CfgUnitInsignia {
+	class A3CG {
+		displayName = "Combat Group"; 														/*/ Name displayed in Arsenal/*/
+		author = "Quiksilver"; 																/*/ Author displayed in Arsenal/*/
+		texture = "media\images\insignia\comm_patch.paa";	 										/*/ Image path/*/
+		textureVehicle = "media\images\insignia\comm_patch.paa"; 									/*/ Does nothing currently, reserved for future use/*/
+	};
+};
+class CfgCarrier {
+	class LaunchSettings {
+		duration = 6;
+		distance = 15;
+		condShow = "";
+		condProgres = "";		//----- yes, one S in Progres...
+		codeEnd = "['TAKEOFF_END'] call (missionNamespace getVariable 'QS_fnc_carrier');";
+		codeStart = "['TAKEOFF_START'] call (missionNamespace getVariable 'QS_fnc_carrier');";
+	};
+};
+/*/
+class CfgWorlds {
+	class Any // or specific world name
+	{
+		author = "Quiksilver";
+		description = "Invade & Annex";
+		pictureMap = "media\images\loadScreens\loading_1.paa";
+		pictureShot = "media\images\loadScreens\loading_2.paa";
+		loadingTexts[] = {"text1", "text2", "text3"};
+	};
+};
+/*/
+
+// Dialogs and Menus
+#include "code\config\dialogs.hpp"
+dev = "Quiksilver";
