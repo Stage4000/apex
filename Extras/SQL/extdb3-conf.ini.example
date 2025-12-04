@@ -1,0 +1,65 @@
+; ============================================================
+; ExtDB3 Configuration File - Sample for Apex Framework
+; ============================================================
+; 
+; This is a sample configuration file for ExtDB3.
+; Copy this file to your Arma 3 server directory and rename it to:
+;   extdb3-conf.ini
+;
+; Make sure to update the database credentials with your actual values!
+;
+; For more information, see: Extras/SQL/SQL-Setup-Guide.md
+; ============================================================
+
+[Main]
+; Log directory (relative to Arma 3 server directory)
+Log Folder = extDB3/logs
+
+; ============================================================
+; Database Configuration
+; ============================================================
+; The section name [apex_framework] must match the _databaseName 
+; setting in @Apex_cfg/parameters.sqf
+; ============================================================
+
+[apex_framework]
+; Database type (MySQL for both MySQL and MariaDB)
+Type = MySQL
+
+; Database name on the MySQL/MariaDB server
+Name = apex_framework
+
+; Database user credentials
+; IMPORTANT: Use a dedicated user with limited permissions!
+; Never use the root account
+Username = arma3_user
+Password = CHANGE_THIS_PASSWORD
+
+; Database server connection
+; Use 127.0.0.1 if database is on the same machine
+; Use actual IP if database is on a different server
+IP = 127.0.0.1
+Port = 3306
+
+; Connection pool settings
+; Adjust based on server load
+; Min Threads: Minimum connections to keep open
+; Max Threads: Maximum concurrent connections
+Min Threads = 2
+Max Threads = 8
+
+; Character encoding (recommended: UTF8)
+Encoding = UTF8
+
+; ============================================================
+; Additional Security Notes
+; ============================================================
+; 1. Create a dedicated MySQL user:
+;    CREATE USER 'arma3_user'@'localhost' IDENTIFIED BY 'strong_password';
+;    GRANT SELECT, INSERT, UPDATE, DELETE ON apex_framework.* TO 'arma3_user'@'localhost';
+;    FLUSH PRIVILEGES;
+;
+; 2. Keep this configuration file secure
+; 3. Do not share or commit this file with credentials
+; 4. Use a strong password (16+ characters recommended)
+; ============================================================

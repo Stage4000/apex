@@ -166,7 +166,42 @@ if (uiNamespace isNil 'QS_fnc_serverCommandPassword') exitWith {
 
 missionNamespace setVariable ['QS_server_isUsingDB',FALSE,FALSE];
 
-/*/ EXTDB3 - Database - Server Setup component would go here /*/
+/*/ EXTDB3 - Database - Server Setup /*/
+/*/ 
+	To enable SQL-based whitelists, set _useDatabase = 1 in @Apex_cfg/parameters.sqf
+	See Extras/SQL/SQL-Setup-Guide.md for full setup instructions
+/*/
+
+// Compile database functions
+missionNamespace setVariable ['QS_fnc_databaseInit',(compileScript ['code\functions\fn_databaseInit.sqf',TRUE]),FALSE];
+missionNamespace setVariable ['QS_fnc_whitelistDB',(compileScript ['code\functions\fn_whitelistDB.sqf',TRUE]),FALSE];
+
+// Check if database is configured in parameters.sqf
+if ((missionNamespace getVariable ['QS_missionConfig_useDatabase',0]) isEqualTo 1) then {
+	diag_log '[Apex Framework] Database mode enabled - initializing ExtDB3...';
+	
+	// Set database configuration variables
+	private _dbName = missionNamespace getVariable ['QS_missionConfig_databaseName','apex_framework'];
+	private _dbProtocol = missionNamespace getVariable ['QS_missionConfig_databaseProtocol','apex_whitelist'];
+	private _cacheDuration = missionNamespace getVariable ['QS_missionConfig_whitelistCacheDuration',300];
+	
+	missionNamespace setVariable ['QS_extdb_database',_dbName,FALSE];
+	missionNamespace setVariable ['QS_extdb_protocol',_dbProtocol,FALSE];
+	missionNamespace setVariable ['QS_whitelist_cacheDuration',_cacheDuration,FALSE];
+	
+	// Initialize database connection
+	private _dbInitSuccess = call (missionNamespace getVariable 'QS_fnc_databaseInit');
+	
+	if (_dbInitSuccess) then {
+		diag_log '[Apex Framework] Database initialized successfully - using SQL whitelists';
+		// Override the whitelist function with DB version
+		missionNamespace setVariable ['QS_fnc_whitelist',(missionNamespace getVariable 'QS_fnc_whitelistDB'),TRUE];
+	} else {
+		diag_log '[Apex Framework] Database initialization failed - falling back to file-based whitelists';
+	};
+} else {
+	diag_log '[Apex Framework] Using file-based whitelist system';
+};
 
 // Server Event Handler
 serverNamespace setVariable ['QS_fnc_serverEventHandler',compileScript ["code\functions\fn_serverEventHandler.sqf",TRUE]];

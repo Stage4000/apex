@@ -256,7 +256,14 @@ _monetizeURL = [
 	"Link 4"															// Tooltip (text shown when mouse hovering over button).
 ];
 
+//===================================================== DATABASE / SQL WHITELIST
+// Enable SQL-based whitelists using ExtDB3 and MySQL/MariaDB
+// For detailed setup instructions, see: Extras/SQL/SQL-Setup-Guide.md
 
+_useDatabase = 0;											// 0 - Disabled (use file-based whitelist.sqf). 1 - Enabled (use SQL database whitelist).
+_databaseName = 'apex_framework';							// Database name - must match section name in extdb3-conf.ini
+_databaseProtocol = 'apex_whitelist';						// Protocol name for ExtDB3 SQL queries
+_whitelistCacheDuration = 300;								// Whitelist cache duration in seconds (300 = 5 minutes). Reduces database queries.
 
 
 
@@ -421,7 +428,11 @@ if ((count _startDate) > 5) then {
 	['QS_missionConfig_splash_serverRules',_serverRules,TRUE],
 	['QS_missionConfig_splash_adminNames',_staffNames,TRUE],
 	['QS_missionConfig_cosmetics',(compileFinal (str _monetizeCosmetics)),TRUE],
-	['QS_missionConfig_monetizeURL',(compileFinal (str _monetizeURL)),TRUE]
+	['QS_missionConfig_monetizeURL',(compileFinal (str _monetizeURL)),TRUE],
+	['QS_missionConfig_useDatabase',_useDatabase,FALSE],
+	['QS_missionConfig_databaseName',_databaseName,FALSE],
+	['QS_missionConfig_databaseProtocol',_databaseProtocol,FALSE],
+	['QS_missionConfig_whitelistCacheDuration',_whitelistCacheDuration,FALSE]
 ];
 {
 	uiNamespace setVariable _x;

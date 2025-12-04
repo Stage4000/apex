@@ -7,14 +7,28 @@ Author:
 Last modified:
 
 	28/04/2022 A3 2.08 by Quiksilver
+	2024 - SQL Database Support Added
 	
 Description:
 
-	UIDs
-
-Comment:
+	UIDs - File-based whitelist system
 	
-	This data can be replaced by extdb3 database system
+SQL Database Mode:
+	
+	This file-based whitelist can be replaced with an SQL database system for:
+	- Real-time whitelist updates without server restart
+	- Centralized management across multiple servers
+	- Easy integration with Discord bots and web panels
+	
+	To enable SQL mode:
+	1. Set _useDatabase = 1 in parameters.sqf
+	2. Configure ExtDB3 with your MySQL/MariaDB database
+	3. Import the schema from Extras/SQL/whitelist_schema.sql
+	4. See Extras/SQL/SQL-Setup-Guide.md for detailed instructions
+	
+	When SQL mode is disabled (default), this file is used for whitelists.
+	
+Comment:
 	
 	For staff IDs, ensure ID is in only one list. For instance, either moderator, admin or developer, but not all of them together.
 	
