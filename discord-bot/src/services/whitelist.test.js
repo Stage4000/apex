@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { WhitelistService } from './whitelist.js';
-import { writeFile, unlink, mkdir } from 'fs/promises';
+import { writeFile, rm, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -184,10 +184,10 @@ describe('WhitelistService', async () => {
     assert.ok(uids.includes('76561198000000002'));
   });
 
-  // Cleanup
+  // Cleanup - remove entire temp directory
   test.after(async () => {
     try {
-      await unlink(testFilePath);
+      await rm(testDir, { recursive: true, force: true });
     } catch {
       // Ignore cleanup errors
     }

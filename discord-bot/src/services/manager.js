@@ -1,7 +1,7 @@
 import config from '../config.js';
 import { WhitelistService } from './whitelist.js';
 import pterodactylService from './pterodactyl.js';
-import { writeFile, readFile } from 'fs/promises';
+import { writeFile, readFile, rm } from 'fs/promises';
 import { mkdtempSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -13,6 +13,17 @@ export class WhitelistManager {
   constructor() {
     this.usePterodactyl = pterodactylService.isEnabled();
     this.tempDir = null;
+  }
+
+  /**
+   * Clean up temporary directory
+   * @returns {Promise<void>}
+   */
+  async cleanup() {
+    if (this.tempDir && existsSync(this.tempDir)) {
+      await rm(this.tempDir, { recursive: true, force: true });
+      this.tempDir = null;
+    }
   }
 
   /**

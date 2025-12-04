@@ -175,13 +175,30 @@ async function handleList(interaction) {
 
   const roleInfo = config.whitelistRoles.find((r) => r.name === role);
 
+  // Discord embed field values have a 1024 character limit
+  // Handle pagination for large lists
+  let uidDisplay;
+  if (uids.length === 0) {
+    uidDisplay = '*No UIDs in this whitelist*';
+  } else {
+    const formattedUids = uids.map((uid) => `\`${uid}\``);
+    const joined = formattedUids.join('\n');
+    if (joined.length > 1000) {
+      // Truncate and show how many more
+      const maxUids = Math.floor(1000 / 20); // ~20 chars per UID line
+      uidDisplay = formattedUids.slice(0, maxUids).join('\n') + `\n... and ${uids.length - maxUids} more`;
+    } else {
+      uidDisplay = joined;
+    }
+  }
+
   const embed = new EmbedBuilder()
     .setTitle(`📋 ${role} Whitelist`)
     .setDescription(roleInfo?.description || 'No description available')
     .setColor(0x0099ff)
     .addFields({
       name: `UIDs (${uids.length})`,
-      value: uids.length > 0 ? uids.map((uid) => `\`${uid}\``).join('\n') : '*No UIDs in this whitelist*',
+      value: uidDisplay,
     })
     .setTimestamp()
     .setFooter({ text: `Requested by ${interaction.user.tag}` });
@@ -253,14 +270,14 @@ async function handleStatus(interaction) {
  * Handle the backup subcommand
  */
 async function handleBackup(interaction) {
-  await interaction.deferReply();
-
   if (!whitelistManager.isPterodactylEnabled()) {
-    return interaction.editReply({
+    return interaction.reply({
       content: '❌ Backup is only available when using Pterodactyl Panel integration.',
       ephemeral: true,
     });
   }
+
+  await interaction.deferReply();
 
   const backupPath = await whitelistManager.createBackup();
 
