@@ -410,6 +410,19 @@ If you encounter issues:
 
 ---
 
+## Advanced: Steam OAuth Self-Service Whitelist
+
+For a self-service whitelist system where players can authenticate via Steam and be automatically added to the whitelist, see the `Extras/SteamOAuth` directory. This PHP application:
+
+- Uses Steam OpenID for secure authentication
+- Automatically retrieves the player's Steam ID
+- Adds players to configured whitelists (S3, CAS, etc.)
+- Logs all additions to the audit table
+
+See `Extras/SteamOAuth/README.md` for setup instructions.
+
+---
+
 ## Advanced: Discord Bot Integration
 
 The SQL-based whitelist system makes it easy to integrate with Discord bots. Here's a simple example using Python:
@@ -450,6 +463,7 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')
 ## Version History
 
 - **2024** - Initial SQL whitelist implementation
+- **2024** - Steam OAuth self-service whitelist added
 - Based on Apex Framework 1.5.6
 
 ---
