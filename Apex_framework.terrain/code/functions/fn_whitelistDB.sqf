@@ -85,6 +85,8 @@ private _return = [];
 private _dbProtocol = missionNamespace getVariable ['QS_extdb_protocol', 'apex_whitelist'];
 
 // Build SQL query
+// Note: _type is already validated against whitelist above, so SQL injection is prevented
+// ExtDB3 doesn't support parameterized queries, so we rely on input validation
 private _query = format [
 	"SELECT steam_uid FROM player_whitelist WHERE whitelist_type = '%1' AND is_active = 1",
 	_type
@@ -93,9 +95,6 @@ private _query = format [
 // Execute query via ExtDB3
 private _queryResult = '';
 try {
-	// Async query approach
-	private _queryID = format ['whitelist_%1_%2', _type, round(random 999999)];
-	
 	// Send query
 	_queryResult = 'extDB3' callExtension format ['1:%1:SQL:%2', _dbProtocol, _query];
 	
@@ -105,6 +104,7 @@ try {
 		private _result = '';
 		
 		waitUntil {
+			uiSleep 0.05; // Small delay to prevent busy-wait CPU usage
 			_result = 'extDB3' callExtension format ['5:%1', _dbProtocol];
 			((_result isNotEqualTo '') && (_result isNotEqualTo '["1"]')) || (diag_tickTime > _timeout)
 		};
