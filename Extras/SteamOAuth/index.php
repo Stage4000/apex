@@ -437,7 +437,7 @@ function handleStatus(array $config): void
     $playerName = $_SESSION['player_name'] ?? 'Unknown';
     
     $content = '<p><strong>Steam ID:</strong> <span class="steam-id">' . htmlspecialchars($steamId) . '</span></p>';
-    $content .= '<p><strong>Player Name:</strong> ' . htmlspecialchars((string) $playerName) . '</p>';
+    $content .= '<p><strong>Player Name:</strong> ' . htmlspecialchars($playerName) . '</p>';
     
     // Show current whitelists from database
     try {

@@ -16,6 +16,7 @@ namespace ApexFramework\SteamOAuth;
 class SteamAuth
 {
     private const STEAM_OPENID_URL = 'https://steamcommunity.com/openid/login';
+    private const STEAM_ID_LENGTH = 17;
     
     private string $returnUrl;
     
@@ -92,7 +93,8 @@ class SteamAuth
         // Extract Steam ID from claimed_id
         // Format: https://steamcommunity.com/openid/id/76561198000000000
         $claimedId = $params['openid_claimed_id'];
-        if (preg_match('/^https:\/\/steamcommunity\.com\/openid\/id\/(\d{17})$/', $claimedId, $matches)) {
+        $pattern = '/^https:\/\/steamcommunity\.com\/openid\/id\/(\d{' . self::STEAM_ID_LENGTH . '})$/';
+        if (preg_match($pattern, $claimedId, $matches)) {
             return $matches[1];
         }
         
