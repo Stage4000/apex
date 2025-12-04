@@ -88,3 +88,17 @@ There are a few other options to choose inside that "parameters.sqf" file.
 Inside the "whitelist.sqf" file, you can set player UIDs to give them various permissions. Zeus and Developer permissions are located near the bottom. For Zeus you do not need to edit the mission file, the framework will generate a module on the fly as you log in.
 You can set custom chat messages inside the "chatMessages.sqf" file.
 Ingame admin tools are accessed with key-combo [Shift]+[F2]. For more info, view the map diary tab "Key bindings".
+
+SQL Database Whitelist (Optional):
+
+The framework supports SQL-based whitelists using ExtDB3 and MySQL/MariaDB databases.
+This allows real-time whitelist updates without server restart and easy integration with Discord bots.
+
+To enable SQL whitelists:
+1. Set _useDatabase = 1 in "@Apex_cfg\parameters.sqf"
+2. Install ExtDB3 addon
+3. Set up MySQL/MariaDB database
+4. Import the schema from "Extras\SQL\whitelist_schema.sql"
+5. Configure extdb3-conf.ini with your database credentials
+
+For detailed setup instructions, see: "Extras\SQL\SQL-Setup-Guide.md"
